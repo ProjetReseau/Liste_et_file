@@ -1,5 +1,8 @@
 //déclaration de file
 
+#ifndef __FILECLIENT__
+#define __FILECLIENT__
+
 #include <pthread.h>
 
 
@@ -29,3 +32,7 @@ int enfiler_fifo(fifo* file, char* data);
 int defiler_fifo(fifo* file, char *emplacement);
 
 void supprimer_fifo(fifo* file);
+
+
+
+#endif
