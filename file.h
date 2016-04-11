@@ -17,11 +17,36 @@ typedef struct fifo_head{
   
   int nb_elmt;
   int sock;
+  char pseudo[TAILLE_PSEUDO];
   fifo_elmt *tete;
   fifo_elmt *fin;
   pthread_mutex_t *mutex_fifo;
   
 } fifo;
+
+typedef struct liste_elmt{
+  
+  fifo *file;
+  struct liste_elmt *preced;
+  struct liste_elmt *suiv;
+  
+} liste_elmt;
+
+typedef struct liste_head{
+  
+  int taille;
+  liste_elmt *premier;
+  pthread_mutex_t *mutex_liste;
+  
+} liste;
+
+int ajouter_liste(liste* list,fifo* file);
+
+liste_elmt* chercher_par_pseudo(liste* list,char* pseudo);
+
+int supprimer_par_pseudo(liste* list,char* pseudo);
+
+
 
 #define estVide_fifo(file) (file->nb_elmt==0)
 
