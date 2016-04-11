@@ -46,7 +46,7 @@ liste_elmt* chercher_par_pseudo(liste* list,char* pseudo);
 
 int supprimer_par_pseudo(liste* list,char* pseudo);
 
-
+int rechercher_par_pseudo(liste* list,char* pseudo, fifo** resultat);
 
 #define estVide_fifo(file) (file->nb_elmt==0)
 
