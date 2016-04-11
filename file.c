@@ -2,6 +2,7 @@
 
 #include "protocole.h"
 #include "file.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <pthread.h>
@@ -13,6 +14,7 @@ fifo* creer_fifo(void){
   tete->mutex_fifo=malloc(sizeof(pthread_mutex_t));
   tete->nb_elmt=0;
   pthread_mutex_init(tete->mutex_fifo,NULL);
+  sprintf(tete->pseudo,"?");
   
   return tete;
   
@@ -85,6 +87,75 @@ void supprimer_fifo(fifo* file){
   
   free(file);
   
+}
+
+int ajouter_liste(liste* list,fifo* file){
+  
+  pthread_mutex_lock(list->mutex_liste);
+  
+  liste_elmt* element=malloc(sizeof(liste_elmt));
+  element->file=file;
+  element->preced=NULL;
+  element->suiv=list->premier;
+  if(list->premier!=NULL)
+    list->premier->preced=element;
+  list->premier=element;
+  list->taille++;
+  
+  pthread_mutex_unlock(list->mutex_liste);
+
+}
+
+
+
+int rechercher_par_pseudo(liste* list,char* pseudo, fifo** resultat){
+  
+    int i;
+  liste_elmt* result=list->premier;
+  
+  for(i=0;i<list->taille;i++){
+    if(0==strcmp(pseudo,result->file->pseudo)){
+      
+      *resultat=result->file;
+      
+      return 1;
+    }
+    result=result->suiv;
+  }
+  return 0;
+
+  
+}
+
+
+
+int supprimer_par_pseudo(liste* list,char* pseudo){
+  
+  int i;
+  liste_elmt* result=list->premier;
+  
+  for(i=0;i<list->taille;i++){
+    if(0==strcmp(pseudo,result->file->pseudo)){
+      
+        pthread_mutex_lock(list->mutex_liste);
+      
+      if(result->suiv!=NULL)
+	result->suiv->preced=result->preced;
+      if(result->preced!=NULL)
+	result->preced->suiv=result->suiv;
+      else
+	list->premier=result->suiv;
+      list->taille--;
+      free(result);
+      
+      pthread_mutex_unlock(list->mutex_liste);
+      
+      return 1;
+    }
+    result=result->suiv;
+  }
+  return 0;
+    
 }
 
 
