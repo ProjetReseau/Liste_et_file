@@ -18,9 +18,7 @@ typedef struct fifo_head{
   int nb_elmt;
   int sock;
   char pseudo[TAILLE_PSEUDO];
-	#ifdef SERVEUR
-  		char ext_dist[25];
-	#endif
+  char ext_dist[25];
   fifo_elmt *tete;
   fifo_elmt *fin;
   pthread_mutex_t *mutex_fifo;
